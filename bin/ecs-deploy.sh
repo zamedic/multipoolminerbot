@@ -4,7 +4,7 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   # Deploy only if we're testing the master branch
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     echo "Deploying $TRAVIS_BRANCH on $TASK_DEFINITION"
-    ./bin/ecs-deploy -c $TASK_DEFINITION -n $SERVICE -i $IMAGE_NAME:$TRAVIS_BRANCH
+    ./bin/ecs-deploy -c $TASK_DEFINITION -n $SERVICE -i $IMAGE_NAME:1.$TRAVIS_JOB_NUMBER
   else
     echo "Skipping deploy because it's not an allowed branch"
   fi
