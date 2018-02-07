@@ -1,0 +1,30 @@
+language: go
+go:
+- master
+
+env:
+  global:
+      - CGO_ENABLED=0
+      - CC_TEST_REPORTER_ID=9fad6a32515069524d3ed4dc9931d880b6c97088f79121fc700465cd8d66a305
+addons:
+  artifacts: true
+sudo: false
+services:
+ - docker
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  - go get github.com/axw/gocov/gocov
+
+
+script:
+ - bin/test.sh
+ - go build
+
+after_success:
+  - bin/docker_push.sh
+  - bin/ecs-deploy.sh
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t gocov
